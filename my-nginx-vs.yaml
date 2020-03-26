@@ -18,14 +18,14 @@ data:
             "remark": "user define configmap ",
             "my-nginx": {
                 "class": "Tenant",
-                "my-nginx-80-vs": {
+                "my-nginx-80": {
                     "class": "Application",
                     "template": "generic",
                     "my-nginx-80-vs": {
                         "class": "Service_HTTP",
                         "remark": "my-nginx-prod-vip",
                         "virtualAddresses": [
-                            "<>"
+                            "10.110.128.154"
                         ],
                         "snat": {
                             "bigip": "/Common/SNAT-VLAN128"
