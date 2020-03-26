@@ -1,0 +1,78 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: my-nginx-vs
+  namespace: my-nginx2
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+        "class": "AS3",
+        "declaration": {
+            "class": "ADC",
+            "schemaVersion": "3.17.0",
+            "id": "urn:uuid:33045210-3ab8-4636-9b2a-c98d22ab915d",
+            "label": "my-nginx2_as3",
+            "remark": "user define configmap ",
+            "my-nginx2_as3": {
+                "class": "Tenant",
+                "my-nginx2-80": {
+                    "class": "Application",
+                    "template": "generic",
+                    "my-nginx-80-vs": {
+                        "class": "Service_HTTP",
+                        "remark": "my-nginx-prod-vip",
+                        "virtualAddresses": [
+                            "10.110.128.155"
+                        ],
+                        "snat": {
+                            "bigip": "/Common/SNAT-VLAN128"
+                        },
+                        "profileHTTP": "/Common/http-custom-xff",
+                        "pool": "my-nginx-pool"
+                    },
+                    "my-nginx-pool": {
+                        "class": "Pool",
+                        "monitors": [
+                            "http"
+                        ],
+                        "members": [
+                            {
+                                "servicePort": 80,
+                                "serverAddresses": []
+                            }
+                        ]
+                    }
+                },
+                "dg-nginx-80-vs": {
+                    "class": "Application",
+                    "template": "generic",
+                    "dg-nginx-80-vs": {
+                        "class": "Service_HTTP",
+                        "remark": "dg-nginx-prod-vip",
+                        "virtualAddresses": [
+                            "10.110.128.156"
+                        ],
+                        "snat": {
+                            "bigip": "/Common/SNAT-VLAN128"
+                        },
+                        "pool": "dg-nginx-pool"
+                    },
+                    "dg-nginx-pool": {
+                        "class": "Pool",
+                        "monitors": [
+                            "http"
+                        ],
+                        "members": [
+                            {
+                                "servicePort": 80,
+                                "serverAddresses": []
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
