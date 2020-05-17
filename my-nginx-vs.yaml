@@ -25,7 +25,7 @@ data:
                         "class": "Service_HTTP",
                         "remark": "my-nginx-prod-vip",
                         "virtualAddresses": [
-                            "10.110.128.154"
+                            "10.110.<>"
                         ],
                         "snat": {
                             "bigip": "/Common/SNAT-VLAN128"
